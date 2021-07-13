@@ -1,0 +1,11 @@
+
+<table class="w3-margin w3-table w3-striped w3-bordered">
+    <tr class="w3-dark-grey">
+        <th>Navn</th>
+        <th>Fødselsdag</th>
+    </tr>
+    <tr ng-repeat="hest in heste">
+        <td>{{hest.navn}}</td>
+        <td>{{hest.foedt.toLocaleDateString()}}</td>
+    </tr>
+</table>

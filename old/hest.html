@@ -1,0 +1,84 @@
+
+<div class="w3-container w3-cell-row">
+    <div class="w3-cell">
+        <div class="w3-card-4 w3-margin">
+        
+            <div class="w3-container w3-dark-grey">
+                <h2>Redigér hest</h2>
+            </div>
+        
+            <form class="w3-container w3-padding">
+        
+                <label>Navn</label>
+                <input class="w3-input" type="text" ng-model="hest.navn"/>
+                <br>
+                
+                <label>Fødselsdag</label>
+                <input class="w3-input" type="date" ng-model="hest.foedt"/>
+                <br>
+                
+                <label>Køn</label>
+                <select class="w3-select" name="option" ng-model="hest.koen">
+                    <option value="Hoppe">Hoppe</option>
+                    <option value="Vallak">Vallak</option>
+                    <option value="Hingst">Hingst</option>
+                </select>
+                <br>
+                <br>
+                
+                <label>Højde</label>
+                <input class="w3-input" type="number" ng-model="hest.hoejde"/>
+                <br>
+
+                <label>Identifikationsnummer</label>
+                <input class="w3-input" type="text" ng-model="hest.id"/>
+                <br>
+                
+                <button ng-click="deleteHorse(hest)" class="w3-button w3-red w3-right">Slet</button>
+        
+            </form>
+        
+        </div>
+    </div>
+    <div class="w3-cell">
+        <div class="w3-card-4 w3-margin">
+        
+            <div class="w3-container w3-dark-grey">
+                <h2>Vacciner</h2>
+            </div>
+
+            <div class="w3-panel w3-margin w3-leftbar w3-light-grey w3-border">
+                <p>Ingen forestående vacciner</p>
+            </div>
+        
+            <form>
+                <table class="w3-table w3-striped w3-bordered">
+                    <tr>
+                        <th>
+                            Type
+                        </th>
+                        <th>
+                            Dato
+                        </th>
+                    </tr>
+                    <tr ng-repeat="vac in hest.vaccine">
+                        <td>{{vac.type}}</td>
+                        <td>{{vac.dato.toLocaleDateString()}}</td>
+                    </tr>
+                    
+                    <tr><td colspan="2"></td></tr>
+                    
+                    <tr>
+                        <td>
+                            <input class="w3-input" type="text" placeholder="Type">
+                        </td>
+                        <td>
+                            <input class="w3-input" type="date">
+                        </td>
+                    </tr>
+                </table>
+                <button class="w3-button w3-green w3-block">Tilføj</button>
+            </form>
+        </div>
+    </div>
+</div>
