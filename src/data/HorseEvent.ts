@@ -1,109 +1,29 @@
 
-function empty(): Data {
-    return {
-        horses: []
-    }
-}
-
-function sample(): Data {
-    return {
-        horses: [new Horse(
-            'Marlon B OX',
-            new Date('1/1/2010'),
-            157,
-            '208336OX1105432',
-            Sex.Gelding,
-            [
-                new Competition(
-                    'Rom CEI*1',
-                    new Date('8/2/2021'),
-                    10000,
-                    ''
-                ),
-                new Treatment(
-                    'Ormekur',
-                    new Date('7/1/2021'),
-                    'Panacur',
-                    new Date('8/1/2021'),
-                ),
-                new Farrier(
-                    '',
-                    new Date('6/1/2021')
-                )
-            ]
-        )]
-    }
-}
-
-interface Data {
-    horses: Horse[]
-}
-
-class Horse {
-
-    static new() {
-        return new Horse(
-            'Unavngivet hest',
-            new Date(),
-            150,
-            'Ikke angivet',
-            Sex.Mare,
-            [],
-        )
-    }
-
-    constructor(
-        public name: string,
-        public birth: Date,
-        public height: number,
-        public id: string,
-        public sex: Sex,
-        public events: HorseEvent[]
-    ) {
-        this.sortEvents()
-    }
-
-    sortEvents() {
-        this.events.sort((a,b) => b.date.valueOf() - a.date.valueOf())
-    }
-
-    latestOf<T extends EventType>(type: T) {
-        return this.events.filter(e => e.type == type)[0] as TypeMaping[T] | void
-    }
-    eventsOf<T extends EventType>(type: T) {
-        return this.events.filter(e => e.type == type) as TypeMaping[T][]
-    }
-
-    notifs() {
-        let notifs = this.events.flatMap(e => e.notif() || [])
-        let farrier = this.latestOf(EventType.Farrier)
-        if (farrier && farrier.weeksAgo() >= 4)
-            notifs.push(`${farrier.weeksAgo()} uger gamle sko`)
-        return notifs
-    }
-
-    expenses() {
-        return this.events.reduce((sum, e) => sum + e.expenses(), 0)
-    }
-    
-}
-
 enum EventType {
     Competition,
     Farrier,
-    Treatment
+    Treatment,
+    Vaccination,
 }
 
 const EventTypes = [
     EventType.Competition,
     EventType.Farrier,
     EventType.Treatment,
+    EventType.Vaccination,
 ]
 
 type TypeMaping = {
     [EventType.Competition]: Competition,
     [EventType.Treatment]: Treatment,
-    [EventType.Farrier]: Farrier
+    [EventType.Farrier]: Farrier,
+    [EventType.Vaccination]: Vaccination,
+}
+
+const VAC_TYPES = ['EHV','INF'] as Vaccination['type'][]
+interface Vaccination {
+    type: 'EHV' | 'INF'
+    date: Date,
 }
 
 abstract class HorseEvent {
@@ -200,3 +120,47 @@ enum Sex {
 }
 
 const ONE_DAY = 24*60*60*1000
+const ONE_WEEK = 7 * ONE_DAY
+
+function checkVaccines(h: Horse, t: Vaccination['type']) {
+    const THREE_MONTHS = ONE_DAY * 72
+    /*
+        BASIS: two vacs with 4-6w interval
+        MAINTENANCE: < 6m
+    */
+    let vacs = h.eventsOf(EventType.Vaccination)
+        .filter(v => v.type == t)
+    // check for basis
+    /** idx of booster */
+    let boosterIdx = -1
+    for (let i = vacs.length - 1; i > 0; i--) {
+        let dif = vacs[i].date.valueOf() - vacs[i-1].date.valueOf()
+        if (dif >= 4 * ONE_WEEK && dif <= 6 * ONE_WEEK) {
+            boosterIdx = i
+            break
+        }
+    }
+    // check for maintenance
+    let maintenanceOkay = boosterIdx >= 0
+    let nextVac: null | Date = null
+    if (boosterIdx >= 0) {
+        let lastDate = vacs[boosterIdx].date
+        for (let i = boosterIdx; i < vacs.length; i++) {
+            let date = vacs[i].date
+            let dif = date.valueOf() - lastDate.valueOf()
+            lastDate = date
+            if (dif > 2 * THREE_MONTHS) {
+                maintenanceOkay = false
+                break
+            }
+        }
+        if (maintenanceOkay) {
+            nextVac = new Date(lastDate.valueOf() + 2 * THREE_MONTHS)
+        }
+    }
+    return {
+        boosterOkay: boosterIdx >= 0,
+        maintenanceOkay,
+        nextMaintenance: nextVac,
+    }
+}
