@@ -3,7 +3,7 @@ interface AppProps {
     data: Data
 }
 interface AppState extends AppProps {
-    view: 'overview' | Horse
+    view: 'overview' | 'feed' | Horse
 }
 class App extends React.Component<AppProps, AppState> {
     constructor(props: AppProps) {
@@ -40,6 +40,7 @@ class App extends React.Component<AppProps, AppState> {
         return <div>
             <div className="w3-bar w3-green">
                 <a onClick={this.select('overview')} className="w3-bar-item w3-button">Oversigt</a>
+                <a onClick={this.select('feed')} className="w3-bar-item w3-button">Fodring</a>
                 <div className="w3-dropdown-hover">
                     <button className="w3-button">Heste</button>
                     <div className="w3-dropdown-content w3-bar-block w3-card-4">
@@ -61,6 +62,8 @@ class App extends React.Component<AppProps, AppState> {
                 return <HorseOverview key={h.id} horse={this.state.view as Horse}/>
             case String:
                 switch (this.state.view) {
+                    case 'feed':
+                        return <Feeding/>
                     case 'overview':
                         // fallthrough
                 }

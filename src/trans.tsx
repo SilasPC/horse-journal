@@ -2,7 +2,8 @@
 const eventTrans: {[key in EventType]: string} = {
     [EventType.Competition]: 'Stævne',
     [EventType.Farrier]: 'Smed',
-    [EventType.Treatment]: 'Behandling'
+    [EventType.Treatment]: 'Behandling',
+    [EventType.Vaccination]: 'Vaccination',
 }
 
 function renderEventType(t: EventType) {
