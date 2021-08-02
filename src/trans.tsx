@@ -1,8 +1,13 @@
 
+
 const eventTrans: {[key in EventType]: string} = {
     [EventType.Competition]: 'Stævne',
     [EventType.Farrier]: 'Smed',
     [EventType.Treatment]: 'Behandling'
+}
+
+function eventTypeName(t: EventType): string {
+    return eventTrans[t]
 }
 
 function renderEventType(t: EventType) {

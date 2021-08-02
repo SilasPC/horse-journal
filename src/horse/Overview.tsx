@@ -3,17 +3,38 @@ interface HorseOverviewProps {
     horse: Horse
 }
 interface HorseOverviewState extends HorseOverviewProps {
-
+    editModal?: HorseEvent
 }
 class HorseOverview extends React.Component<HorseOverviewProps, HorseOverviewState> {
     constructor(props: HorseOverviewProps) {
         super(props)
         this.state = {...props}
     }
+
+    openModal(ev: HorseEvent) {
+        this.setState({
+            editModal: ev
+        })
+    }
+    closeModal() {
+        this.state.horse.sortEvents()
+        this.setState({
+            editModal: undefined
+        })
+    }
+
+    createEvent() {
+        let e = new Competition('Unavngivet stævne', new Date(), 0, '')
+        this.state.horse.events.push(e)
+        this.state.horse.sortEvents()
+        this.setState({
+            editModal: e
+        })
+    }
     
     render() {
         return <div>
-                <div className="w3-container w3-cell-row">
+            <div className="w3-container w3-cell-row">
                 <div className="w3-cell">
                     <HorseEdit horse={this.state.horse}/>
                 </div>
@@ -22,11 +43,20 @@ class HorseOverview extends React.Component<HorseOverviewProps, HorseOverviewSta
                 </div>
             </div>
             <Card header="Kalender">{this.renderCalender()}</Card>
+            {isDefined(this.state.editModal) ? <EventEdit horse={this.state.horse} event={this.state.editModal} onClose={() => this.closeModal()}/> : ''}
         </div>
     }
 
     renderOverview() {
-        return <Card header='Oversigt'>{this.renderTreatments()}</Card>
+        return <Card header='Oversigt'>
+            {this.renderNotifs()}
+            {this.renderTreatments()}
+            {this.renderExpenses()}
+        </Card>
+    }
+
+    renderExpenses() {
+        return this.renderPanel(`Omkostninger ${this.state.horse.expenses()} kroner`)
     }
 
     renderTreatments() {
@@ -38,6 +68,18 @@ class HorseOverview extends React.Component<HorseOverviewProps, HorseOverviewSta
             cur.map(x => `${x.name} indtil ${x.end.toLocaleDateString()}`).join(', '),
             true
         )
+    }
+
+    renderNotifs() {
+        let events = this.state.horse.notifs()
+        if (events.length == 0) return ''
+        return <Panel col="w3-pale-red">
+            <h4>Underetninger</h4>
+            <ul>
+                {events.map(e => <li key={e}><p>{e}<br/></p></li>)}
+            </ul>
+        </Panel>
+
     }
 
     renderPanel(text: string, emp = false) {
@@ -52,10 +94,17 @@ class HorseOverview extends React.Component<HorseOverviewProps, HorseOverviewSta
             <td>{e.name}</td>
             <td>{e.date.toLocaleDateString()}</td>
             <td>{Math.round((e.date.valueOf() - now) / ONE_DAY)}</td>
+            <td>
+                <button className="w3-button w3-red">Slet</button>
+                <button className="w3-button w3-blue" onClick={() => this.openModal(e)}>Redigér</button>
+            </td>
         </tr>)
-        return <Table headers={["Type", "Notat", "Dato", "Dage tilbage"]}>
-            {els}
-        </Table>
+        return <div>
+            <Table headers={["Type", "Notat", "Dato", "Dage tilbage", "Handlinger"]}>
+                {els}
+            </Table>
+            <button className="w3-button w3-block w3-green" onClick={() => this.createEvent()}>Tilføj begivenhed</button>
+        </div>
     }
 
 }

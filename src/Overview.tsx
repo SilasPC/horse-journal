@@ -1,4 +1,5 @@
 
+
 interface OverviewProps {
     data: Data
 }
@@ -26,7 +27,7 @@ class Overview extends React.Component<OverviewProps, OverviewState> {
                         {
                             this.state.data.horses.map(h => <tr key={h.id}>
                                 <td>{h.name}</td>
-                                <td>{h.birth.toLocaleDateString()}</td>
+                                <td>{h.latestOf(EventType.Farrier)?.date?.toLocaleDateString() ?? ''}</td>
                             </tr>)
                         }
                     </Table>
@@ -52,7 +53,7 @@ class Overview extends React.Component<OverviewProps, OverviewState> {
                 <p>Ingen underretninger</p>
             </Panel>
         }
-        return events.map(([h,e]) => <Panel key={h.id} col="w3-light-grey">
+        return events.map(([h,e]) => <Panel key={h.id} col="w3-pale-red">
             <h4>{h.name}</h4>
             <ul>
                 {e.map(e => <li key={e}><p>{e}<br/></p></li>)}
@@ -73,15 +74,17 @@ class Overview extends React.Component<OverviewProps, OverviewState> {
                 if (isDefined(f.eventType) && f.eventType != e.type) {continue}
 
                 let v = e.date.valueOf()
+                // i is first index where it is newer than the the element
                 let i = events.findIndex(se => v > se[1].date.valueOf())
                 events.splice(i+1, 0, [h.name, e])
             }
         }
+        events.reverse()
 
         let now = Date.now()
         let els = events.map(([h,e]) => <tr key={h+e.date.toString()}>
             <td>{h}</td>
-            <td>{renderEventType(e.type)}</td>
+            <td>{eventTypeName(e.type)}</td>
             <td>{e.name}</td>
             <td>{e.date.toLocaleDateString()}</td>
             <td>{Math.round((e.date.valueOf() - now) / ONE_DAY)}</td>

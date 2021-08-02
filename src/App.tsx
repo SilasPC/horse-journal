@@ -1,4 +1,5 @@
 
+
 interface AppProps {
     data: Data
 }
@@ -47,8 +48,6 @@ class App extends React.Component<AppProps, AppState> {
                         <a className="w3-bar-item w3-button" onClick={() => this.createHorse()}>Tilføj...</a>
                     </div>
                 </div>
-                <a className="w3-bar-item w3-button">Smed</a>
-                <a className="w3-bar-item w3-button">Vaccine</a>
             </div>
             {this.renderView()}
         </div>
@@ -65,7 +64,7 @@ class App extends React.Component<AppProps, AppState> {
                         // fallthrough
                 }
         }
-        return <Overview data={this.state.data}/>
+        return <Overview key={Math.random()} data={this.state.data}/>
     }
 
 }

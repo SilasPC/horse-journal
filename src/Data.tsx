@@ -17,6 +17,7 @@ function sample(): Data {
                 new Competition(
                     'Rom CEI*1',
                     new Date('8/2/2021'),
+                    10000,
                     ''
                 ),
                 new Treatment(
@@ -58,7 +59,13 @@ class Horse {
         public id: string,
         public sex: Sex,
         public events: HorseEvent[]
-    ) {}
+    ) {
+        this.sortEvents()
+    }
+
+    sortEvents() {
+        this.events.sort((a,b) => b.date.valueOf() - a.date.valueOf())
+    }
 
     latestOf<T extends EventType>(type: T) {
         return this.events.filter(e => e.type == type)[0] as TypeMaping[T] | void
@@ -73,6 +80,10 @@ class Horse {
         if (farrier && farrier.weeksAgo() >= 4)
             notifs.push(`${farrier.weeksAgo()} uger gamle sko`)
         return notifs
+    }
+
+    expenses() {
+        return this.events.reduce((sum, e) => sum + e.expenses(), 0)
     }
     
 }
@@ -125,6 +136,7 @@ abstract class HorseEvent {
         return this.isAheadWithinDays(14)
     }
     notif(): string | void {}
+    expenses(): number {return 0}
 }
 
 class Treatment extends HorseEvent {
@@ -147,6 +159,7 @@ class Competition extends HorseEvent {
     constructor(
         note: string,
         date: Date,
+        public cost: number,
         public result: string
     ) {
         super(note, date, EventType.Competition)
@@ -160,6 +173,8 @@ class Competition extends HorseEvent {
         if (!this.result && this.isOverDue())
             return `Angiv stævne resultat for '${this.name}'`
     }
+
+    expenses() {return this.cost}
 
 }
 
