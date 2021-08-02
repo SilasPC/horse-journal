@@ -1,11 +1,19 @@
 
+import { Card, Panel, Table } from "../common"
+import { Horse } from "../data/Horse"
+import { HorseEvent, Competition, EventType, ONE_DAY } from "../data/HorseEvent"
+import { EventEdit } from "../Event"
+import { isDefined } from "../Overview"
+import { renderEventType } from "../trans"
+import { HorseEdit } from "./Edit"
+
 interface HorseOverviewProps {
     horse: Horse
 }
 interface HorseOverviewState extends HorseOverviewProps {
     editModal?: HorseEvent
 }
-class HorseOverview extends React.Component<HorseOverviewProps, HorseOverviewState> {
+export class HorseOverview extends React.Component<HorseOverviewProps, HorseOverviewState> {
     constructor(props: HorseOverviewProps) {
         super(props)
         this.state = {...props}

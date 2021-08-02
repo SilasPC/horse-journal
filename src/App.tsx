@@ -1,4 +1,9 @@
 
+import { Data, empty } from './data/Data'
+import { Horse } from './data/Horse'
+import { Feeding } from './Feed'
+import { HorseOverview } from './horse/Overview'
+import { Overview } from './Overview'
 
 interface AppProps {
     data: Data
@@ -6,7 +11,7 @@ interface AppProps {
 interface AppState extends AppProps {
     view: 'overview' | 'feed' | Horse
 }
-class App extends React.Component<AppProps, AppState> {
+export class App extends React.Component<AppProps, AppState> {
     constructor(props: AppProps) {
         super(props)
         this.state = {

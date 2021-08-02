@@ -1,6 +1,5 @@
 
-
-const Card = (props: {header: string, children: React.ReactNode}) =>
+export const Card = (props: {header: string, children: React.ReactNode}) =>
     <div className="w3-card-4 w3-margin">
         <div className="w3-container w3-dark-grey">
             <h2>{props.header}</h2>
@@ -11,7 +10,7 @@ const Card = (props: {header: string, children: React.ReactNode}) =>
         <br/>
     </div>
 
-const Table = (props: {headers: (string|React.ReactNode)[], children: React.ReactNode}) =>
+export const Table = (props: {headers: (string|React.ReactNode)[], children: React.ReactNode}) =>
     <table className="w3-table w3-striped w3-bordered">
         <thead>
             <tr>
@@ -23,20 +22,20 @@ const Table = (props: {headers: (string|React.ReactNode)[], children: React.Reac
         </tbody>
     </table>
 
-const Panel = (props: {col: string, children: React.ReactNode}) =>
+export const Panel = (props: {col: string, children: React.ReactNode}) =>
     <div className={`w3-panel w3-margin w3-leftbar ${props.col} w3-border`}>
         {props.children}
     </div>
 
-const CellRow = (props: {children: React.ReactNode[]}) =>
+export const CellRow = (props: {children: React.ReactNode[]}) =>
     <div className="w3-cell-row">
         {props.children}
     </div>
 
-const CellCol = (props: {children: React.ReactNode}) =>
+export const CellCol = (props: {children: React.ReactNode}) =>
     <div className="w3-cell">{props.children}</div>
 
-const Modal = (props: {header: string, onClose: () => void, children: React.ReactNode}) =>
+export const Modal = (props: {header: string, onClose: () => void, children: React.ReactNode}) =>
     <div className="w3-modal w3-show">
         <div className="w3-modal-content w3-card-4">
             <div className="w3-container w3-dark-grey">
@@ -50,14 +49,14 @@ const Modal = (props: {header: string, onClose: () => void, children: React.Reac
         </div>
     </div>
 
-const icons = {
+export const icons = {
     horseShoe: 'assets/horseShoe.png',
     medic: 'assets/medic.png',
     vaccine: 'assets/vaccine.png',
     helmet: 'assets/helmet.png'
 }
 
-const Icon = (k: keyof typeof icons) => <img height="20" src={icons[k]}/>
+export const Icon = (k: keyof typeof icons) => <img height="20" src={icons[k]}/>
 
 interface MutInputProps<T> {
     onChange: (v: T) => void
@@ -65,7 +64,7 @@ interface MutInputProps<T> {
     value: T
     type: T extends string ? 'string' : ( T extends number ? 'number' : 'date')
 }
-class MutInput<T extends string|number|Date> extends React.Component<MutInputProps<T>, {mutating:boolean,value:T,prev:T}> {
+export class MutInput<T extends string|number|Date> extends React.Component<MutInputProps<T>, {mutating:boolean,value:T,prev:T}> {
     constructor(props: MutInputProps<T>) {
         super(props)
         this.state = {
@@ -136,7 +135,7 @@ class MutInput<T extends string|number|Date> extends React.Component<MutInputPro
     
 }
 
-function dateToInput(d: Date) {
+export function dateToInput(d: Date) {
     return d.toISOString().substring(0,10)
 }
 
@@ -144,7 +143,7 @@ interface TextAreaProps {
     value: string,
     onChange(s: string): void
 }
-class TextArea extends React.Component<TextAreaProps, {value: string}> {
+export class TextArea extends React.Component<TextAreaProps, {value: string}> {
     constructor(props: TextAreaProps) {
         super(props)
         this.state = {

@@ -1,4 +1,10 @@
 
+import { CellRow, CellCol, Card, Table, Panel } from "./common"
+import { Data } from "./data/Data"
+import { Horse } from "./data/Horse"
+import { EventType, HorseEvent, ONE_DAY, EventTypes } from "./data/HorseEvent"
+import { eventTypeName } from "./trans"
+
 
 interface OverviewProps {
     data: Data
@@ -9,7 +15,7 @@ interface OverviewState extends OverviewProps {
         horseName?: string
     }
 }
-class Overview extends React.Component<OverviewProps, OverviewState> {
+export class Overview extends React.Component<OverviewProps, OverviewState> {
     
     constructor(props: OverviewProps) {
         super(props)
@@ -118,4 +124,4 @@ class Overview extends React.Component<OverviewProps, OverviewState> {
 
 }
 
-function isDefined<T>(val?: T): val is T {return val != undefined && val != null}
+export function isDefined<T>(val?: T): val is T {return val != undefined && val != null}

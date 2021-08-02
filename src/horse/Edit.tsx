@@ -1,4 +1,7 @@
 
+import { Card, MutInput } from "../common"
+import { Horse, Sex } from "../data/Horse"
+
 
 interface HorseEditProps {
     horse: Horse
@@ -6,7 +9,7 @@ interface HorseEditProps {
 interface HorseEditState extends HorseEditProps {
 
 }
-class HorseEdit extends React.Component<HorseEditProps, HorseEditState> {
+export class HorseEdit extends React.Component<HorseEditProps, HorseEditState> {
     constructor(props: HorseEditProps) {
         super(props)
         this.state = {...props}

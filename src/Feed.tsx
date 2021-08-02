@@ -1,6 +1,8 @@
 
+import { Table } from "./common"
+
 type FeedProps = ObjMap<Feed>
-const Feeding = (p: FeedProps) =>
+export const Feeding = (p: FeedProps) =>
     <Table headers={['Foder', 'Beskrivelse', 'Min', 'Max']}>
         {
             Object.entries(p)

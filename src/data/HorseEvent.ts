@@ -1,32 +1,34 @@
 
-enum EventType {
+import { Horse } from "./Horse"
+
+export enum EventType {
     Competition,
     Farrier,
     Treatment,
     Vaccination,
 }
 
-const EventTypes = [
+export const EventTypes = [
     EventType.Competition,
     EventType.Farrier,
     EventType.Treatment,
     EventType.Vaccination,
 ]
 
-type TypeMaping = {
+export type TypeMaping = {
     [EventType.Competition]: Competition,
     [EventType.Treatment]: Treatment,
     [EventType.Farrier]: Farrier,
     [EventType.Vaccination]: Vaccination,
 }
 
-const VAC_TYPES = ['EHV','INF'] as Vaccination['type'][]
-interface Vaccination {
+export const VAC_TYPES = ['EHV','INF'] as Vaccination['type'][]
+export interface Vaccination {
     type: 'EHV' | 'INF'
     date: Date,
 }
 
-abstract class HorseEvent {
+export abstract class HorseEvent {
     constructor(
         public name: string,
         public date: Date,
@@ -59,7 +61,7 @@ abstract class HorseEvent {
     expenses(): number {return 0}
 }
 
-class Treatment extends HorseEvent {
+export class Treatment extends HorseEvent {
     constructor(
         name: string,
         date: Date,
@@ -75,7 +77,7 @@ class Treatment extends HorseEvent {
 
 }
 
-class Competition extends HorseEvent {
+export class Competition extends HorseEvent {
     constructor(
         note: string,
         date: Date,
@@ -98,7 +100,7 @@ class Competition extends HorseEvent {
 
 }
 
-class Farrier extends HorseEvent {
+export class Farrier extends HorseEvent {
     constructor(
         note: string,
         date: Date,
@@ -113,16 +115,11 @@ class Farrier extends HorseEvent {
 
 }
 
-enum Sex {
-    Gelding,
-    Stallion,
-    Mare,
-}
 
-const ONE_DAY = 24*60*60*1000
-const ONE_WEEK = 7 * ONE_DAY
+export const ONE_DAY = 24*60*60*1000
+export const ONE_WEEK = 7 * ONE_DAY
 
-function checkVaccines(h: Horse, t: Vaccination['type']) {
+export function checkVaccines(h: Horse, t: Vaccination['type']) {
     const THREE_MONTHS = ONE_DAY * 72
     /*
         BASIS: two vacs with 4-6w interval

@@ -1,11 +1,15 @@
 
+import { MutInput } from "./common"
+import { Horse } from "./data/Horse"
+import { HorseEvent, EventType, Competition } from "./data/HorseEvent"
+
 interface EventEditProps {
     horse: Horse
     event: HorseEvent
     onClose: () => void
 }
 interface EventEditState extends EventEditProps {}
-class EventEdit extends React.Component<EventEditProps, EventEditState> {
+export class EventEdit extends React.Component<EventEditProps, EventEditState> {
     constructor(props: EventEditProps) {
         super(props)
         this.state = {...props}
