@@ -18,7 +18,8 @@ function sample(): Data {
                 new Competition(
                     'Rom CEI*1',
                     new Date('8/2/2021'),
-                    ''
+                    10000,
+                    '',
                 ),
                 new Treatment(
                     'Ormekur',
